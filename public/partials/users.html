@@ -1,1 +1,20 @@
-Users
+<div class="content">
+	<div class="row top-row">
+		<div class="column small-5 display">Name</div>
+		<div class="column small-5 display">Email</div>
+		<div class="column small-2 text-right"><button class="button success" ng-click="addUser()">
+				<span class="show-for-large">Add</span>
+				<span class="hide-for-large">+</span>
+			</button></div>
+	</div>
+	<div class="row data" ng-repeat="user in users">
+		<div class="column small-5"><a href="#/users/{{user._id}}">{{user.name}}</a></div>
+		<div class="column small-5 dont-break-out"><a href="#/users/{{user._id}}">{{user.email}}</a></div>
+		<div class="column small-2 text-right">
+			<button class="button alert" ng-click="deleteUser(user._id)">
+				<span class="show-for-large">Delete</span>
+				<span class="hide-for-large">X</span>
+			</button>
+		</div>
+	</div>
+</div>

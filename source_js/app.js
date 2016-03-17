@@ -43,6 +43,6 @@ app.config(['$routeProvider', function($routeProvider) {
 		activeTab: 'tasks'
 	}).
 	otherwise({
-		redirectTo: '/settings'
+		redirectTo: '/tasks'
 	});
 }]);
