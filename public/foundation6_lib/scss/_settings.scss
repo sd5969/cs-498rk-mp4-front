@@ -40,6 +40,8 @@
 //  35. Top Bar
 
 @import 'util/util';
+@import url('https://fonts.googleapis.com/css?family=Oswald|Droid+Sans');
+@import url('http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
 
 /*
   NOTE: You can change any of the properties here for your customization.
@@ -55,6 +57,7 @@ $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $primary-color: #2199e8;
 $secondary-color: #777;
+$tertiary-color: #081636;
 $success-color: #3adb76;
 $warning-color: #ffae00;
 $alert-color: #ec5840;
@@ -101,7 +104,7 @@ $block-grid-max: 8;
 // 4. Base Typography
 // ------------------
 
-$header-font-family: $body-font-family;
+$header-font-family: Oswald, sans-serif;
 $header-font-weight: $global-weight-normal;
 $header-font-style: normal;
 $font-family-monospace: Consolas, 'Liberation Mono', Courier, monospace;

@@ -1,1 +1,50 @@
-// Add any custom Sass & CSS here
+body {
+	background-color: $tertiary-color;
+	color: $white;
+}
+
+h1 {
+	color: $primary-color;
+	background-color: $white;
+	margin-bottom: 0px;
+	padding-top: 25px;
+	padding-bottom: 25px;
+}
+
+.bigger {
+	font-size: 1.5em;
+}
+
+.no-gap {
+	margin-bottom: 0px;
+}
+
+.italic, .italics {
+	font-style: italic;
+}
+
+nav.top-bar {
+	text-align:center;
+}
+
+nav.top-bar ul {
+	display: inline-block;
+	font-weight: bold;
+}
+
+nav li.active {
+	background-color: $white;
+	border-radius: 5px;
+}
+
+.content {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin: 0 auto;
+
+	@include breakpoint(medium up) {
+		padding-top: 20px;
+		padding-left: 50px;
+		padding-right: 50px;
+	}
+}
