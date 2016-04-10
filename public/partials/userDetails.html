@@ -1,1 +1,25 @@
-userDetails
+<div class="content paddler">
+	<h4 class="text-center">
+		{{user.name}} - {{user.email}}
+		<button class="button alert float-right" ng-click="deleteUser(user, $event)">
+			<span class="show-for-large">Delete</span>
+			<span class="hide-for-large">X</span>
+		</button>
+	</h4>
+	<h5>Pending Tasks</h5>
+	<div class="row data" ng-repeat="task in tasks" ng-click="taskDetails(task, $event)">
+		<p>
+			{{task.name}}
+			<button class="button success float-right" ng-click="taskComplete(task, $event)">&#10004;</button>
+			<span class="float-right paddlera">Deadline {{task.deadline | date:'medium'}}</span>
+		</p>
+	</div><br />
+	<h5>Completed Tasks</h5>
+	<button class="button" ng-click="loadCompletedTasks($event)" ng-show="!loadedTasks">Load</button>
+	<div class="row data" ng-repeat="cTask in completedTasks" ng-click="taskDetails(cTask, $event)" ng-show="loadedTasks">
+		<p>
+			{{cTask.name}}
+			<span class="float-right paddlera">Deadline {{cTask.deadline | date:'medium'}}</span>
+		</p>
+	</div>
+</div>

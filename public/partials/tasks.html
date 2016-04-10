@@ -1,1 +1,50 @@
-Tasks
+<div class="content">
+	<div class="form clearfix">
+		<label>
+			<input type="radio" ng-model="completed" value="false" ng-change="fetchTasks()">
+			Pending
+		</label>
+		<label>
+			<input type="radio" ng-model="completed" value="true" ng-change="fetchTasks()">
+			Completed
+		</label>
+		<label>
+			<input type="radio" ng-model="completed" value="" ng-change="fetchTasks()">
+			All
+		</label>
+		<div class="float-right">
+			<select ng-model="sortBy" ng-change="fetchTasks()">
+				<optgroup label="Sort By">
+					<option value="dateCreated">Date Created</option>
+					<option value="deadline">Deadline</option>
+					<option value="name">Task Name</option>
+					<option value="assignedUserName">Assigned User</option>
+				</optgroup>
+			</select>
+			<label><input type='radio' name='order' value='1' ng-model="sortUpDown" ng-change="fetchTasks()"> Ascending</label>
+			<label><input type='radio' name='order' value='-1' ng-model="sortUpDown" ng-change="fetchTasks()"> Descending</label>
+		</div>
+	</div>
+	<div class="row top-row">
+		<div class="column small-5 display">Task</div>
+		<div class="column small-5 display">Details</div>
+		<div class="column small-2 text-right"><button class="button success" ng-click="addTask()">
+				<span class="show-for-large">Add</span>
+				<span class="hide-for-large">+</span>
+			</button></div>
+	</div>
+	<div class="row data" dir-paginate="task in tasks | itemsPerPage: 10" ng-click="taskDetails(task, $event)">
+		<div class="column small-5">{{task.name}}</div>
+		<div class="column small-5">
+			Deadline {{task.deadline | date:'medium'}}<br />
+			Assigned: {{task.assignedUserName}}
+		</div>
+		<div class="column small-2 text-right">
+			<button class="button alert" ng-click="deleteTask(task, $event)">
+				<span class="show-for-large">Delete</span>
+				<span class="hide-for-large">X</span>
+			</button>
+		</div>
+	</div>
+	<dir-pagination-controls></dir-pagination-controls>
+</div>

@@ -49,6 +49,30 @@ nav li.active {
 	}
 }
 
+.form {
+	label {
+		display: inline-block;
+		color: $white;
+	}
+
+	select {
+		display: inline-block;
+		width: 150px;
+	}
+}
+
+.paddler {
+	@include breakpoint(small down) {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
+
+.paddlera {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 .top-row {
 	padding: 0px 10px 20px 10px;
 
@@ -57,9 +81,60 @@ nav li.active {
 	}
 }
 
+.pagination {
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	list-style: none;
+
+	li {
+		background-color: $white;
+		display: inline-block;
+		border-radius: 4px;
+		padding: 5px 10px;
+		margin-right: 10px;
+
+		&:last-child {
+			margin-right: 0px;
+		}
+
+		&:hover {
+			background-color: darken($white, 10%);
+		}
+	}
+
+	li.active {
+		background-color: lighten($primary-color, 40%);
+	}
+
+	li.disabled {
+		background-color: darken($white, 30%);
+
+		&:hover {
+			background-color: darken($white, 30%);
+		}
+
+		a {
+			color: $black;
+			cursor: default;
+		}
+	}
+}
+
+.userDropdown {
+	max-width: 200px;
+}
+
+.strong {
+	font-weight: bold;
+}
+
 .display {
 	font-size: 1.5em;
 	font-weight: bold;
+	letter-spacing: 1px;
 	@include display();
 }
 
@@ -67,6 +142,7 @@ nav li.active {
 	padding: 10px;
 	background-color: lighten($tertiary-color, 10%);
 	transition: 0.5s;
+	cursor: pointer;
 
 	&:nth-child(even) {
 		background-color: darken($primary-color, 10%);

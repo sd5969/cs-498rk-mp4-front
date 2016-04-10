@@ -45,6 +45,43 @@ mp4Services.factory('Database', ['$http', '$window', function($http, $window) {
 		return $http.get(baseURL() + "tasks");
 	}
 
+	database.getTasksByUser = function(user) {
+		var params = {
+			where : '{"assignedUserName" : "' + user.name + '"}'
+		};
+		return $http.get(baseURL() + "tasks", {params : params});
+	}
+
+	database.getPendingTasksByUser = function(user) {
+		var params = {
+			where : '{"assignedUserName" : "' + user.name + '", "completed" : false}'
+		};
+		return $http.get(baseURL() + "tasks", {params : params});
+	}
+
+	database.getCompletedTasksByUser = function(user) {
+		var params = {
+			where : '{"assignedUserName" : "' + user.name + '", "completed" : true}'
+		};
+		return $http.get(baseURL() + "tasks", {params : params});
+	}
+
+	database.getTasksSpecific = function(pending, sortBy, sortOrder) {
+		if(pending === '') {
+			var params = {
+				sort : '{"' + sortBy + '" : ' + sortOrder + '}'
+			};
+			return $http.get(baseURL() + "tasks", {params : params});
+		}
+		else {
+			var params = {
+				where : '{"completed" : ' + pending + '}',
+				sort : '{"' + sortBy + '" : ' + sortOrder + '}'
+			};
+			return $http.get(baseURL() + "tasks", {params : params});
+		}
+	}
+
 	database.getTask = function(id) {
 		return $http.get(baseURL() + "tasks/" + id);
 	}
@@ -67,11 +104,17 @@ mp4Services.factory('Database', ['$http', '$window', function($http, $window) {
 		return $http.post(baseURL() + "tasks", data);
 	}
 
+	database.completeTask = function(task) {
+		task.completed = true;
+		return $http.put(baseURL() + "tasks/" + task._id, task);
+	}
+
 	database.updateTask = function(id, data) {
 		return $http.put(baseURL() + "tasks/" + id, data);
 	}
 
 	database.deleteTask = function(id) {
+		// need to handle removing the task from a user if pending...
 		return $http.delete(baseURL() + "tasks/" + id);
 	}
 

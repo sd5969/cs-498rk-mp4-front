@@ -1,1 +1,29 @@
-taskDetails
+<div class="content paddler">
+	<h4 class="text-center">
+		{{task.name}}
+		<button class="button alert float-right" ng-click="deleteTask($event)">
+			<span class="show-for-large">Delete</span>
+			<span class="hide-for-large">X</span>
+		</button>
+		<button class="button success float-right" ng-click="editTask($event)">
+			Edit
+		</button>
+	</h4>
+	<p><span class="strong">Deadline:</span> {{task.deadline | date : 'medium'}}</p>
+	<p><span class="strong">Description:</span> {{task.description}}</p>
+	<p><span class="strong">Assigned To:</span> {{task.assignedUserName}}</p>
+	<p><span class="strong">Date Created:</span> {{task.dateCreated | date : 'medium'}}</p>
+	<p>
+		<span class="strong">Status:</span>
+		<span class="form">
+			<label>
+				<input type="radio" ng-model="task.completed" ng-value="false" ng-change="setTask()">
+				Pending
+			</label>
+			<label>
+				<input type="radio" ng-model="task.completed" ng-value="true" ng-change="setTask()">
+				Completed
+			</label>
+		</span>
+	</p>
+</div>

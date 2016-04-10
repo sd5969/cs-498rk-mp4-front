@@ -37,7 +37,7 @@
 @import 'components/menu';
 @import 'components/off-canvas';
 @import 'components/orbit';
-@import 'components/pagination';
+// @import 'components/pagination';
 @import 'components/progress-bar';
 @import 'components/reveal';
 @import 'components/slider';
@@ -79,7 +79,7 @@
   @include foundation-menu;
   @include foundation-off-canvas;
   @include foundation-orbit;
-  @include foundation-pagination;
+  // @include foundation-pagination;
   @include foundation-progress-bar;
   @include foundation-slider;
   @include foundation-sticky;

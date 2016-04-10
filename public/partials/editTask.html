@@ -1,1 +1,37 @@
-editTask
+<div class="list row content paddler">
+	<div class="row">
+		<div class="column small-6">
+			<input ng-model="task.name" type="text" placeholder="Task Name">
+		</div>
+		<div class="column small-6">
+			<datepicker>
+				<input ng-model="task.deadline" type="text" placeholder="Deadline">
+			</datepicker>
+		</div>
+	</div>
+	<input ng-model="task.description" type="text" placeholder="Description">
+	<p>
+		<span class="strong">Status:</span>
+		<span class="form">
+			<label>
+				<input type="radio" ng-model="task.completed" ng-value="false" ng-change="setTask()">
+				Pending
+			</label>
+			<label>
+				<input type="radio" ng-model="task.completed" ng-value="true" ng-change="setTask()">
+				Completed
+			</label>
+		</span>
+	</p>
+	<div class="row">
+		<div class="column small-9 medium-6 text-right">
+			<span class="strong">User:</span>
+			<select class="userDropdown" ng-model="selectedUser" ng-options="user._id as user.name for user in users" ng-change="updateUser()"></select>
+		</div>
+		<div class="column small-3 medium-6 text-left">
+			<button ng-click="editTask()" class="button">Submit</button>
+		</div>
+	</div>
+</div>
+	
+</div>
