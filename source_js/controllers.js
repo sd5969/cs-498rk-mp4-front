@@ -130,6 +130,14 @@ mp4Controllers.controller('AddUserController', ['$scope', 'Database', '$location
 	$scope.email;
 
 	$scope.addUser = function addUser() {
+		if(!$scope.name || $scope.name === '') {
+			toastr.error('Please enter a user name');
+			return;
+		}
+		else if(!$scope.email || $scope.email === '') {
+			toastr.error('Please enter an email');
+			return;
+		}
 		var user = {
 			name : $scope.name,
 			email : $scope.email
@@ -253,13 +261,21 @@ mp4Controllers.controller('AddTaskController', ['$scope', 'Database', '$location
 	}
 
 	$scope.addTask = function() {
+		if(!$scope.name || $scope.name === '') {
+			toastr.error('Please enter a task name');
+			return;
+		}
+		else if(!$scope.deadline || $scope.deadline === '') {
+			toastr.error('Please enter a task deadline');
+			return;
+		}
 		var task = {
 			name : $scope.name,
 			deadline : new Date($scope.deadline),
 			description : $scope.description,
 			completed : false,
-			assignedUser : $scope.selectedUser._id,
-			assignedUserName : $scope.selectedUser.name
+			assignedUser : ($scope.selectedUser ? $scope.selectedUser._id : ''),
+			assignedUserName : ($scope.selectedUser ? $scope.selectedUser.name : 'unassigned')
 		};
 		Database.addTask(task).success(function(data) {
 			if(data.message) toastr.success(data.message);
@@ -315,6 +331,14 @@ mp4Controllers.controller('EditTaskController', ['$scope', 'Database', '$routePa
 	}
 
 	$scope.editTask = function() {
+		if(!$scope.task.name || $scope.task.name === '') {
+			toastr.error('Please enter a task name');
+			return;
+		}
+		else if(!$scope.task.deadline || $scope.task.deadline === '') {
+			toastr.error('Please enter a task deadline');
+			return;
+		}
 		$scope.updateUser();
 		Database.updateTask($scope.taskID, $scope.task).success(function(data) {
 			if(data.message) toastr.success(data.message);
