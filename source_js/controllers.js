@@ -16,6 +16,7 @@ mp4Controllers.controller('SettingsController', ['$scope', '$window', function($
 mp4Controllers.controller('UsersController', ['$scope', 'Database', '$location', function($scope, Database, $location) {
 
 	$scope.users;
+	$scope.deleteDisabled = false;
 	getUsers();
 
 	function getUsers() {
@@ -33,15 +34,18 @@ mp4Controllers.controller('UsersController', ['$scope', 'Database', '$location',
 	}
 
 	$scope.deleteUser = function(user, $event) {
+		$scope.deleteDisabled = true;
 		$event.stopPropagation();
 		Database.deleteUser(user._id).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Deleted user ' + user.name);
 			getUsers();
+			$scope.deleteDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error('Error: ' + data.message);
 			else toastr.error('Unable to delete user ' + user.name);
+			$scope.deleteDisabled = false;
 		});
 	}
 
@@ -58,6 +62,7 @@ mp4Controllers.controller('UserDetailController', ['$scope', 'Database', '$route
 	$scope.tasks;
 	$scope.completedTasks;
 	$scope.loadedTasks = false;
+	$scope.deleteDisabled = false;
 	getUser(userID);
 
 	function getUser(id) {
@@ -96,7 +101,8 @@ mp4Controllers.controller('UserDetailController', ['$scope', 'Database', '$route
 
 	$scope.taskComplete = function(task, $event) {
 		$event.stopPropagation();
-		Database.completeTask(task).success(function(data) {
+		task.completed = true;
+		Database.updateTask(task).success(function(data) {
 			toastr.success('Task marked as completed');
 			getTasks($scope.user);
 			if($scope.loadedTasks) getCompletedTasks($scope.user);
@@ -111,15 +117,18 @@ mp4Controllers.controller('UserDetailController', ['$scope', 'Database', '$route
 	}
 
 	$scope.deleteUser = function(user, $event) {
+		$scope.deleteDisabled = true;
 		$event.stopPropagation();
 		Database.deleteUser(user._id).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Deleted user ' + user.name);
 			$location.path("/users");
+			$scope.deleteDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error('Error: ' + data.message);
 			else toastr.error('Unable to delete user ' + user.name);
+			$scope.deleteDisabled = false;
 		});
 	}
 
@@ -128,6 +137,7 @@ mp4Controllers.controller('UserDetailController', ['$scope', 'Database', '$route
 mp4Controllers.controller('AddUserController', ['$scope', 'Database', '$location', function($scope, Database, $location) {
 	$scope.name;
 	$scope.email;
+	$scope.addDisabled = false;
 
 	$scope.addUser = function addUser() {
 		if(!$scope.name || $scope.name === '') {
@@ -138,6 +148,7 @@ mp4Controllers.controller('AddUserController', ['$scope', 'Database', '$location
 			toastr.error('Please enter an email');
 			return;
 		}
+		$scope.addDisabled = true;
 		var user = {
 			name : $scope.name,
 			email : $scope.email
@@ -146,10 +157,12 @@ mp4Controllers.controller('AddUserController', ['$scope', 'Database', '$location
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Added user ' + user.name);
 			$location.path("/users");
+			$scope.addDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error(data.message);
 			else toastr.error('Unable to add user ' + user.name);
+			$scope.addDisabled = false;
 		});
 	}
 }]);
@@ -160,6 +173,7 @@ mp4Controllers.controller('TasksController', ['$scope', 'Database', '$location',
 	$scope.completed = 'false';
 	$scope.sortBy = 'dateCreated';
 	$scope.sortUpDown = '1';
+	$scope.deleteDisabled = false;
 	getTasks($scope.completed, $scope.sortBy, $scope.sortUpDown);
 
 	function getTasks(pending, sortField, sortOrder) {
@@ -186,15 +200,18 @@ mp4Controllers.controller('TasksController', ['$scope', 'Database', '$location',
 	}
 
 	$scope.deleteTask = function(task, $event) {
+		$scope.deleteDisabled = true;
 		$event.stopPropagation();
-		Database.deleteTask(task._id).success(function(data) {
+		Database.deleteTask(task).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Deleted task');
 			getTasks($scope.completed, $scope.sortBy, $scope.sortUpDown);
+			$scope.deleteDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error(data.message);
 			else toastr.error('Unable to delete task');
+			$scope.deleteDisabled = false;
 		});
 	}
 
@@ -204,6 +221,7 @@ mp4Controllers.controller('TaskDetailController', ['$scope', 'Database', '$route
 
 	$scope.taskID = $routeParams.task_id;
 	$scope.task;
+	$scope.deleteDisabled = false;
 	getTask($scope.taskID);
 
 	function getTask(id) {
@@ -217,15 +235,18 @@ mp4Controllers.controller('TaskDetailController', ['$scope', 'Database', '$route
 	}
 
 	$scope.deleteTask = function($event) {
+		$scope.deleteDisabled = true;
 		$event.stopPropagation();
-		Database.deleteTask($scope.task._id).success(function(data) {
+		Database.deleteTask($scope.task).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Deleted task');
 			$location.path("/tasks");
+			$scope.deleteDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error(data.message);
 			else toastr.error('Unable to delete task');
+			$scope.deleteDisabled = false;
 		});
 	}
 
@@ -234,7 +255,7 @@ mp4Controllers.controller('TaskDetailController', ['$scope', 'Database', '$route
 	}
 
 	$scope.setTask = function($event) {
-		Database.updateTask($scope.taskID, $scope.task).success(function(data) {
+		Database.updateTask($scope.task).success(function(data) {
 
 		})
 		.error(function(data) {
@@ -250,6 +271,7 @@ mp4Controllers.controller('AddTaskController', ['$scope', 'Database', '$location
 	$scope.users;
 	$scope.name, $scope.deadline, $scope.description, $scope.selectedUser;
 	getUsers();
+	$scope.addDisabled = false;
 
 	function getUsers() {
 		Database.getUsers().success(function(data) {
@@ -269,6 +291,7 @@ mp4Controllers.controller('AddTaskController', ['$scope', 'Database', '$location
 			toastr.error('Please enter a task deadline');
 			return;
 		}
+		$scope.addDisabled = true;
 		var task = {
 			name : $scope.name,
 			deadline : new Date($scope.deadline),
@@ -281,10 +304,12 @@ mp4Controllers.controller('AddTaskController', ['$scope', 'Database', '$location
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Added task');
 			$location.path("/tasks");
+			$scope.addDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error(data.message);
 			else toastr.error('Unable to add task');
+			$scope.addDisabled = false;
 		});
 	}
 
@@ -294,15 +319,17 @@ mp4Controllers.controller('EditTaskController', ['$scope', 'Database', '$routePa
 
 	$scope.taskID = $routeParams.task_id;
 	$scope.users;
+	$scope.originalUser;
 	$scope.selectedUser;
 	$scope.task;
+	$scope.submitDisabled = false;
 	getUsers();
 	getTask($scope.taskID);
 
 	function getTask(id) {
 		Database.getTask(id).success(function(data) {
 			$scope.task = data.data;
-			// $scope.selectedUser = $filter('filter')($scope.users, { _id : $scope.task.assignedUser});
+			$scope.originalUser = $scope.task.assignedUser;
 			$scope.selectedUser = $scope.task.assignedUser;
 			// toastr.success('Loaded task ID ' + id + ' information');
 		})
@@ -339,15 +366,21 @@ mp4Controllers.controller('EditTaskController', ['$scope', 'Database', '$routePa
 			toastr.error('Please enter a task deadline');
 			return;
 		}
+		$scope.submitDisabled = true;
+		var lastUser = $scope.originalUser;
 		$scope.updateUser();
-		Database.updateTask($scope.taskID, $scope.task).success(function(data) {
+		var newUser = $scope.task.assignedUser;
+
+		Database.updateTaskAndUser($scope.task, lastUser, newUser).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Edited task successfully');
 			$location.path("/tasks/" + $scope.taskID);
+			$scope.submitDisabled = false;
 		})
 		.error(function(data) {
 			if(data.message) toastr.error(data.message);
 			else toastr.error('Unable to edit task');
+			$scope.submitDisabled = false;
 		});
 	}
 }]);

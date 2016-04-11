@@ -86,37 +86,121 @@ mp4Services.factory('Database', ['$http', '$window', function($http, $window) {
 		return $http.get(baseURL() + "tasks/" + id);
 	}
 
-	/*
+	database.addTask = function(task) {
 
-	database.addTask = function(name, deadline, assignedUserName, assignedUser, completed, description) {
-		return $http.post(baseURL() + "users", {name: name, deadline: deadline, assignedUserName : assignedUserName,
-			assignedUser : assignedUser, completed: completed, description: description});
+		return $http.post(baseURL() + "tasks", task).success(function(data) {
+			var newTask = data.data;
+			if(newTask.assignedUser) {
+				var user;
+				database.getUser(newTask.assignedUser).success(function(data) {
+					user = data.data;
+					if(user.name) {
+						user.pendingTasks.push(newTask._id);
+						database.updateUser(user._id, user);
+					}
+				});
+			}
+		});
+
 	}
 
-	database.editTask = function(id, name, deadline, assignedUserName, assignedUser, completed, description) {
-		return $http.put(baseURL() + "users/" + id, {name: name, deadline: deadline, assignedUserName : assignedUserName,
-			assignedUser : assignedUser, completed: completed, description: description});
+	database.updateTask = function(task) {
+
+		return $http.put(baseURL() + "tasks/" + task._id, task).success(function(data) {
+			if(task.assignedUser) {
+				if(task.completed) {
+					var user;
+					database.getUser(task.assignedUser).success(function(data) {
+						user = data.data;
+						if(user.name) {
+							var taskIndex = user.pendingTasks ? user.pendingTasks.indexOf(task._id) : -1;
+							if(taskIndex >= 0) {
+								user.pendingTasks.splice(taskIndex, 1);
+								database.updateUser(user._id, user);
+							}
+						}
+					});
+				}
+				else {
+					var user;
+					database.getUser(task.assignedUser).success(function(data) {
+						user = data.data;
+						if(user.name) {
+							var taskIndex = user.pendingTasks ? user.pendingTasks.indexOf(task._id) : -1;
+							if(taskIndex < 0) {
+								user.pendingTasks.push(task._id);
+								database.updateUser(user._id, user);
+							}
+						}
+					});
+				}
+			}
+		});
+
 	}
 
-	*/
-
-	database.addTask = function(data) {
-		return $http.post(baseURL() + "tasks", data);
+	database.updateTaskAndUser = function(task, oldUser, newUser) {
+		if(oldUser === newUser) return database.updateTask(task);
+		database.getUser(oldUser).success(function(data) {
+			var user;
+			user = data.data;
+			if(user.name) {
+				var taskIndex = user.pendingTasks ? user.pendingTasks.indexOf(task._id) : -1;
+				if(taskIndex >= 0) {
+					user.pendingTasks.splice(taskIndex, 1);
+					database.updateUser(user._id, user);
+				}
+			}
+		});
+		if(task.completed) {
+			database.getUser(newUser).success(function(data) {
+				var user;
+				user = data.data;
+				if(user.name) {
+					var taskIndex = user.pendingTasks ? user.pendingTasks.indexOf(task._id) : -1;
+					if(taskIndex >= 0) {
+						user.pendingTasks.splice(taskIndex, 1);
+						database.updateUser(user._id, user);
+					}
+				}
+			});
+		}
+		else {
+			database.getUser(newUser).success(function(data) {
+				var user;
+				user = data.data;
+				if(user.name) {
+					var taskIndex = user.pendingTasks ? user.pendingTasks.indexOf(task._id) : -1;
+					if(taskIndex < 0) {
+						user.pendingTasks.push(task._id);
+						database.updateUser(user._id, user);
+					}
+				}
+			});
+		}
+		return database.updateTask(task);
 	}
 
-	database.completeTask = function(task) {
-		task.completed = true;
-		return $http.put(baseURL() + "tasks/" + task._id, task);
-	}
+	database.deleteTask = function(task) {
+		
+		return $http.delete(baseURL() + "tasks/" + task._id).success(function(data) {
+			if(task.assignedUser) {
+				var user;
+				database.getUser(task.assignedUser).success(function(data) {
+					user = data.data;
+					if(user.name) {
+						var taskIndex = user.pendingTasks ? user.pendingTasks.indexOf(task._id) : -1;
+						if(taskIndex >= 0) {
+							user.pendingTasks.splice(taskIndex, 1);
+							database.updateUser(user._id, user);
+						}
+					}
+				});
+			}
+		});
 
-	database.updateTask = function(id, data) {
-		return $http.put(baseURL() + "tasks/" + id, data);
-	}
-
-	database.deleteTask = function(id) {
-		// need to handle removing the task from a user if pending...
-		return $http.delete(baseURL() + "tasks/" + id);
 	}
 
 	return database;
+
 }]);

@@ -11,7 +11,7 @@
 		<div class="column small-5">{{user.name}}</div>
 		<div class="column small-5 dont-break-out">{{user.email}}</div>
 		<div class="column small-2 text-right">
-			<button class="button alert" ng-click="deleteUser(user, $event)">
+			<button class="button alert" ng-click="deleteUser(user, $event)" ng-disabled="deleteDisabled">
 				<span class="show-for-large">Delete</span>
 				<span class="hide-for-large">X</span>
 			</button>

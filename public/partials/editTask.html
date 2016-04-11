@@ -29,7 +29,7 @@
 			<select class="userDropdown" ng-model="selectedUser" ng-options="user._id as user.name for user in users" ng-change="updateUser()"></select>
 		</div>
 		<div class="column small-3 medium-6 text-left">
-			<button ng-click="editTask()" class="button">Submit</button>
+			<button ng-click="editTask()" class="button" ng-disabled="submitDisabled">Submit</button>
 		</div>
 	</div>
 </div>

@@ -1,7 +1,7 @@
 <div class="content paddler">
 	<h4 class="text-center">
 		{{user.name}} - {{user.email}}
-		<button class="button alert float-right" ng-click="deleteUser(user, $event)">
+		<button class="button alert float-right" ng-click="deleteUser(user, $event)" ng-disabled="deleteDisabled">
 			<span class="show-for-large">Delete</span>
 			<span class="hide-for-large">X</span>
 		</button>

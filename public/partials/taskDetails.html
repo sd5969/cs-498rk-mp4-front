@@ -1,7 +1,7 @@
 <div class="content paddler">
 	<h4 class="text-center">
 		{{task.name}}
-		<button class="button alert float-right" ng-click="deleteTask($event)">
+		<button class="button alert float-right" ng-click="deleteTask($event)" ng-disabled="deleteDisabled">
 			<span class="show-for-large">Delete</span>
 			<span class="hide-for-large">X</span>
 		</button>
