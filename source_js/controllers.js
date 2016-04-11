@@ -36,7 +36,7 @@ mp4Controllers.controller('UsersController', ['$scope', 'Database', '$location',
 	$scope.deleteUser = function(user, $event) {
 		$scope.deleteDisabled = true;
 		$event.stopPropagation();
-		Database.deleteUser(user._id).success(function(data) {
+		Database.deleteUser(user).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Deleted user ' + user.name);
 			getUsers();
@@ -119,7 +119,7 @@ mp4Controllers.controller('UserDetailController', ['$scope', 'Database', '$route
 	$scope.deleteUser = function(user, $event) {
 		$scope.deleteDisabled = true;
 		$event.stopPropagation();
-		Database.deleteUser(user._id).success(function(data) {
+		Database.deleteUser(user).success(function(data) {
 			if(data.message) toastr.success(data.message);
 			else toastr.success('Deleted user ' + user.name);
 			$location.path("/users");

@@ -37,8 +37,18 @@ mp4Services.factory('Database', ['$http', '$window', function($http, $window) {
 		return $http.put(baseURL() + "users/" + id, data);
 	}
 
-	database.deleteUser = function(id) {
-		return $http.delete(baseURL() + "users/" + id);
+	database.deleteUser = function(user) {
+		var pendingTasks = user.pendingTasks;
+		for(var i = 0; i < pendingTasks.length; i++) {
+			database.getTask(pendingTasks[i]).success(function(data) {
+				var task;
+				task = data.data;
+				task.assignedUser = '';
+				task.assignedUserName = 'unassigned';
+				database.updateTask(task);
+			});
+		}
+		return $http.delete(baseURL() + "users/" + user._id);
 	}
 
 	database.getTasks = function() {
